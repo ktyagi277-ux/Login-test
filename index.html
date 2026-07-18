@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a1628">
+  <title>Vishal TechnoPower - Tender Management System</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><polygon points='80,80 432,80 256,440' fill='%233b82f6'/></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      background: #0a1628;
+      color: #fff;
+    }
+
+    /* ===== BACKGROUND ===== */
+    .bg {
+      position: fixed; inset: 0; z-index: 0;
+      background: linear-gradient(135deg, #071426 0%, #0d2a4d 45%, #14406e 100%);
+    }
+    .bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, rgba(5,15,30,.55) 0%, rgba(5,15,30,.25) 55%, rgba(5,15,30,.45) 100%);
+    }
+
+    /* Animated background particles */
+    .bg-particles {
+      position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+    }
+    .bg-particles .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(59, 130, 246, 0.15);
+      animation: floatParticle linear infinite;
+    }
+    @keyframes floatParticle {
+      0% { transform: translateY(100vh) scale(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100px) scale(1); opacity: 0; }
+    }
+
+    .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+    .main {
+      flex: 1; display: flex; align-items: center; justify-content: space-between;
+      padding: 48px 64px; gap: 40px;
+    }
+
+    /* ===== LEFT BRANDING ===== */
+    .brand { max-width: 580px; }
+
+    .brand-logo-row { display: flex; align-items: center; gap: 14px; margin-bottom: 60px; }
+    .brand-logo-row svg { width: 54px; height: 54px; flex-shrink: 0; }
+    .brand-name { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+    .brand-name .b1 { color: #fff; }
+    .brand-name .b2 { color: #3b82f6; }
+    .brand-name .b3 { color: #fff; }
+    .brand-tagline { font-size: 14px; color: rgba(255,255,255,.78); margin-top: 4px; }
+
+    .brand h1 {
+      font-size: 52px; font-weight: 800; line-height: 1.15; letter-spacing: -1px;
+      margin-bottom: 22px;
+    }
+    .brand h1 .blue { color: #3b82f6; display: block; }
+    .brand .sub {
+      font-size: 19px; color: rgba(255,255,255,.85); line-height: 1.5; max-width: 420px;
+    }
+
+    /* ===== GLASS CARD ===== */
+    .glass-card {
+      width: 100%; max-width: 452px; flex-shrink: 0;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 24px;
+      padding: 34px 32px;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.5);
+    }
+
+    .card-logo { display: flex; align-items: center; justify-content: center; gap: 11px; }
+    .card-logo svg { width: 40px; height: 40px; }
+    .card-logo .cname { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; }
+    .card-sub { text-align: center; font-size: 13px; color: rgba(255,255,255,.72); margin-top: 5px; margin-bottom: 26px; }
+
+    .welcome { font-size: 25px; font-weight: 800; margin-bottom: 5px; }
+    .welcome-sub { font-size: 13.5px; color: rgba(255,255,255,.68); margin-bottom: 22px; }
+
+    .form-panel { display: none; }
+    .form-panel.active { display: block; }
+
+    .fg { margin-bottom: 16px; }
+    .fg-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+    .fg label { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.92); }
+    .forgot { font-size: 12.5px; color: #60a5fa; text-decoration: none; font-weight: 500; }
+    .forgot:hover { text-decoration: underline; }
+
+    .iwrap { position: relative; }
+    .iwrap > i {
+      position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+      color: rgba(255,255,255,.5); font-size: 14px;
+    }
+    .fc {
+      width: 100%; padding: 13px 15px 13px 42px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 11px; font-size: 14px; color: #fff;
+      outline: none; font-family: inherit; transition: all .2s;
+    }
+    .fc::placeholder { color: rgba(255,255,255,.42); }
+    .fc:focus { border-color: #3b82f6; background: rgba(255,255,255,0.12); box-shadow: 0 0 0 3px rgba(59,130,246,.25); }
+
+    input:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 1000px #14304f inset;
+      -webkit-text-fill-color: #fff; caret-color: #fff;
+      transition: background-color 99999s;
+    }
+
+    select.fc { padding-left: 15px; cursor: pointer; }
+    select.fc option { color: #0f172a; }
+
+    .pwd-toggle {
+      position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: rgba(255,255,255,.55);
+      cursor: pointer; padding: 6px; font-size: 14px;
+    }
+    .pwd-toggle:hover { color: #60a5fa; }
+
+    .btn-login {
+      position: relative; width: 100%; padding: 14px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #fff; border: none; border-radius: 11px;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s; margin-top: 6px; font-family: inherit;
+    }
+    .btn-login:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(37,99,235,.45); }
+    .btn-login:disabled { opacity: .7; cursor: not-allowed; }
+    .btn-arrow { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 14px; }
+
+    .spinner {
+      display: inline-block; width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,.4); border-top-color: #fff;
+      border-radius: 50%; animation: spin .7s linear infinite;
+      margin-right: 7px; vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .divider {
+      display: flex; align-items: center; margin: 20px 0;
+      color: rgba(255,255,255,.55); font-size: 12px;
+    }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,.2); }
+    .divider span { padding: 0 14px; }
+
+    .btn-google {
+      width: 100%; padding: 12.5px; background: #fff; color: #1f2937;
+      border: none; border-radius: 11px; font-size: 14px; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: all .2s; font-family: inherit;
+    }
+    .btn-google:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(0,0,0,.3); }
+    .btn-google svg { width: 18px; height: 18px; }
+
+    .req-line { text-align: center; font-size: 13px; color: rgba(255,255,255,.72); margin-top: 20px; }
+    .req-line a { color: #60a5fa; text-decoration: none; font-weight: 600; cursor: pointer; }
+    .req-line a:hover { text-decoration: underline; }
+
+    /* PWA section */
+    #pwaSection { display: none; margin-top: 16px; }
+    #pwaSection.show { display: block; }
+    .btn-pwa {
+      width: 100%; padding: 12px; background: rgba(255,255,255,.1); color: #93c5fd;
+      border: 1px solid rgba(255,255,255,.25); border-radius: 11px;
+      font-size: 13.5px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 9px;
+      transition: all .2s; font-family: inherit;
+    }
+    .btn-pwa:hover:not(:disabled) { background: rgba(255,255,255,.16); }
+    .btn-pwa:disabled { opacity: .7; cursor: not-allowed; }
+    .pwa-hint { font-size: 11.5px; color: rgba(255,255,255,.5); text-align: center; margin-top: 8px; line-height: 1.5; }
+    .pwa-hint strong { color: #93c5fd; }
+
+    /* Password strength */
+    .password-strength { margin-top: 8px; display: flex; gap: 4px; }
+    .strength-bar { flex: 1; height: 4px; background: rgba(255,255,255,.18); border-radius: 2px; transition: background .3s; }
+    .strength-bar.weak { background: #ef4444; }
+    .strength-bar.medium { background: #f59e0b; }
+    .strength-bar.strong { background: #10b981; }
+    .strength-text { font-size: 11px; color: rgba(255,255,255,.55); margin-top: 4px; }
+
+    .back-link { display: inline-block; font-size: 13px; color: #60a5fa; text-decoration: none; margin-bottom: 16px; cursor: pointer; font-weight: 500; }
+    .back-link:hover { text-decoration: underline; }
+
+    /* ===== TOAST NOTIFICATION ===== */
+    .toast-container {
+      position: fixed; top: 20px; right: 20px; z-index: 10000;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .toast {
+      padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 500;
+      color: #fff; min-width: 280px; max-width: 420px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.4);
+      display: flex; align-items: center; gap: 10px;
+      animation: toastIn .3s ease-out;
+      backdrop-filter: blur(10px);
+    }
+    .toast.success { background: rgba(16, 185, 129, 0.9); }
+    .toast.danger { background: rgba(239, 68, 68, 0.9); }
+    .toast.info { background: rgba(59, 130, 246, 0.9); }
+    .toast.warning { background: rgba(245, 158, 11, 0.9); }
+    .toast.removing { animation: toastOut .3s ease-in forwards; }
+    @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes toastOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: rgba(4,12,24,.78);
+      backdrop-filter: blur(8px);
+      padding: 15px 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 13px; color: rgba(255,255,255,.65); flex-wrap: wrap; gap: 10px;
+    }
+    .footer-links { display: flex; gap: 0; align-items: center; }
+    .footer-links span { padding: 0 16px; border-right: 1px solid rgba(255,255,255,.2); cursor: default; }
+    .footer-links span:last-child { border-right: none; }
+    .footer-links span:hover { color: #fff; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1050px) {
+      .main { flex-direction: column; justify-content: center; padding: 32px 20px; gap: 28px; }
+      .brand { max-width: 100%; text-align: center; }
+      .brand-logo-row { justify-content: center; margin-bottom: 22px; }
+      .brand h1 { font-size: 34px; margin-bottom: 12px; }
+      .brand h1 .blue { display: inline; }
+      .brand .sub { font-size: 15px; margin: 0 auto; }
+      .glass-card { max-width: 460px; }
+      .footer { padding: 13px 20px; justify-content: center; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .brand h1 { font-size: 27px; }
+      .glass-card { padding: 26px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="bg-particles" id="bgParticles"></div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <div class="page">
+    <div class="main">
+
+      <!-- ===== LEFT BRANDING ===== -->
+      <div class="brand">
+        <div class="brand-logo-row">
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#60a5fa"/>
+                <stop offset="100%" stop-color="#2563eb"/>
+              </linearGradient>
+            </defs>
+            <polygon points="80,80 432,80 256,440" fill="url(#lg1)"/>
+            <path d="M 290 130 L 180 260 L 240 260 L 210 380 L 340 240 L 280 240 L 290 130 Z" fill="white"/>
+          </svg>
+          <div>
+            <div class="brand-name"><span class="b1">vishal</span><span class="b2">technopower</span><span class="b3">.com</span></div>
+            <div class="brand-tagline">Engineering Tomorrow. Powering India.</div>
+          </div>
+        </div>
+
+        <h1>Powering Industries <span class="blue">Lighting Futures</span></h1>
+        <p class="sub">High Mast Solutions &amp; Solar Energy for a Sustainable Tomorrow</p>
+      </div>
+
+      <!-- ===== GLASS LOGIN CARD ===== -->
+      <div class="glass-card">
+        <div class="card-logo">
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#60a5fa"/>
+                <stop offset="100%" stop-color="#2563eb"/>
+              </linearGradient>
+            </defs>
+            <polygon points="80,80 432,80 256,440" fill="url(#lg2)"/>
+            <path d="M 290 130 L 180 260 L 240 260 L 210 380 L 340 240 L 280 240 L 290 130 Z" fill="white"/>
+          </svg>
+          <div class="cname"><span style="color:#fff">vishal</span><span style="color:#3b82f6">technopower</span><span style="color:#fff">.com</span></div>
+        </div>
+        <div class="card-sub">Tender Management System</div>
+
+        <!-- ===== LOGIN PANEL ===== -->
+        <div id="loginPanel" class="form-panel active">
+          <div class="welcome">Welcome Back</div>
+          <div class="welcome-sub">Please login to your account</div>
+
+          <form id="loginForm">
+            <div class="fg">
+              <div class="fg-label-row"><label>Email / Username</label></div>
+              <div class="iwrap">
+                <i class="fa-regular fa-user"></i>
+                <input type="email" id="loginEmail" class="fc" placeholder="Enter your email or username" required autocomplete="email">
+              </div>
+            </div>
+
+            <div class="fg">
+              <div class="fg-label-row">
+                <label>Password</label>
+                <a href="#" class="forgot" onclick="showToast('Password reset link will be sent to your email.', 'info'); return false;">Forgot Password?</a>
+              </div>
+              <div class="iwrap">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="loginPassword" class="fc" placeholder="Enter your password" required autocomplete="current-password">
+                <button type="button" class="pwd-toggle" onclick="togglePwd('loginPassword', this)">
+                  <i class="fa-solid fa-eye-slash"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-login" id="loginBtn">
+              <span id="loginBtnText">Login <i class="fa-solid fa-arrow-right btn-arrow"></i></span>
+              <span id="loginBtnSpinner" style="display:none;"><span class="spinner"></span> Signing in...</span>
+            </button>
+
+            <div class="divider"><span>or continue with</span></div>
+
+            <button type="button" class="btn-google" onclick="googleNotReady()">
+              <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.7-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C36.9 39.2 44 34 44 24c0-1.3-.1-2.7-.4-3.9z"/></svg>
+              Continue with Google
+            </button>
+
+            <div class="req-line">New to the system? <a onclick="showPanel('signup')">Request Access</a></div>
+
+            <!-- PWA install -->
+            <div id="pwaSection">
+              <button type="button" class="btn-pwa" id="pwaInstallBtn">
+                <i class="fa-solid fa-download"></i>
+                <span id="pwaBtnText">Install App on Device</span>
+              </button>
+              <p class="pwa-hint" id="pwaHint">
+                Install <strong>VISHAL FMS</strong> for faster access &amp; native app experience.
+              </p>
+            </div>
+          </form>
+        </div>
+
+        <!-- ===== SIGNUP / REQUEST ACCESS PANEL ===== -->
+        <div id="signupPanel" class="form-panel">
+          <a class="back-link" onclick="showPanel('login')"><i class="fa-solid fa-arrow-left"></i> Back to Login</a>
+          <div class="welcome" style="font-size:21px;">Request Access</div>
+          <div class="welcome-sub">Admin approval ke baad login milega</div>
+
+          <form id="signupForm">
+            <div class="fg">
+              <div class="fg-label-row"><label>Full Name</label></div>
+              <div class="iwrap">
+                <i class="fa-regular fa-user"></i>
+                <input type="text" id="signupName" class="fc" placeholder="John Doe" required>
+              </div>
+            </div>
+
+            <div class="fg">
+              <div class="fg-label-row"><label>Email Address</label></div>
+              <div class="iwrap">
+                <i class="fa-regular fa-envelope"></i>
+                <input type="email" id="signupEmail" class="fc" placeholder="yourname@gmail.com" required>
+              </div>
+            </div>
+
+            <div class="fg">
+              <div class="fg-label-row"><label>Your Role</label></div>
+              <select id="signupRole" class="fc" required>
+                <option value="Sale Coordinator">Sale Coordinator</option>
+                <option value="Manager">Manager</option>
+                <option value="Tender Executive">Tender Executive</option>
+                <option value="Costing Manager">Costing Manager</option>
+                <option value="CEO">CEO</option>
+              </select>
+            </div>
+
+            <div class="fg">
+              <div class="fg-label-row"><label>Password</label></div>
+              <div class="iwrap">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="signupPassword" class="fc" placeholder="Min 6 characters" required minlength="6">
+                <button type="button" class="pwd-toggle" onclick="togglePwd('signupPassword', this)">
+                  <i class="fa-solid fa-eye-slash"></i>
+                </button>
+              </div>
+              <div class="password-strength" id="strengthBars">
+                <div class="strength-bar"></div>
+                <div class="strength-bar"></div>
+                <div class="strength-bar"></div>
+                <div class="strength-bar"></div>
+              </div>
+              <div class="strength-text" id="strengthText">Password strength</div>
+            </div>
+
+            <div class="fg">
+              <div class="fg-label-row"><label>Confirm Password</label></div>
+              <div class="iwrap">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="signupConfirm" class="fc" placeholder="Re-enter password" required>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-login" id="signupBtn">
+              <span id="signupBtnText">Create Account <i class="fa-solid fa-user-plus btn-arrow"></i></span>
+              <span id="signupBtnSpinner" style="display:none;"><span class="spinner"></span> Creating...</span>
+            </button>
+
+            <p class="pwa-hint" style="margin-top:14px;">
+              Admin will review and approve your account before you can login.
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="footer">
+      <div>&copy; 2025 vishaltechnopower.com. All rights reserved.</div>
+      <div class="footer-links">
+        <span>Privacy Policy</span>
+        <span>Terms of Use</span>
+        <span>Support</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================
+    // MOCK UTILITIES (replaces api.js, auth.js, utils.js)
+    // =========================================================
+
+    // --- Toast Notification System ---
+    function showToast(message, type = 'info', duration = 3500) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+
+      const icons = {
+        success: 'fa-circle-check',
+        danger: 'fa-circle-xmark',
+        info: 'fa-circle-info',
+        warning: 'fa-triangle-exclamation'
+      };
+
+      toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i> ${message}`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add('removing');
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+    }
+
+    // Alias for compatibility
+    const Utils = {
+      toast: showToast
+    };
+
+    // --- Background Particles ---
+    (function createParticles() {
+      const container = document.getElementById('bgParticles');
+      for (let i = 0; i < 20; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.random() * 6 + 2;
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+        p.style.animationDelay = (Math.random() * 10) + 's';
+        container.appendChild(p);
+      }
+    })();
+
+    // =========================================================
+    // PANEL SWITCH (Login <-> Request Access)
+    // =========================================================
+    function showPanel(name) {
+      document.getElementById('loginPanel').classList.toggle('active', name === 'login');
+      document.getElementById('signupPanel').classList.toggle('active', name === 'signup');
+    }
+
+    // =========================================================
+    // GOOGLE BUTTON
+    // =========================================================
+    function googleNotReady() {
+      showToast('Google login abhi available nahi hai — email/password se login karo.', 'info', 4000);
+    }
+
+    // =========================================================
+    // PASSWORD TOGGLE
+    // =========================================================
+    function togglePwd(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fa-solid fa-eye';
+      } else {
+        input.type = 'password';
+        icon.className = 'fa-solid fa-eye-slash';
+      }
+    }
+
+    // =========================================================
+    // LOGIN (SIMULATED)
+    // =========================================================
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const btn = document.getElementById('loginBtn');
+      const btnText = document.getElementById('loginBtnText');
+      const btnSpinner = document.getElementById('loginBtnSpinner');
+
+      btn.disabled = true;
+      btnText.style.display = 'none';
+      btnSpinner.style.display = 'inline-flex';
+
+      // Simulate API call with 1.5s delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Demo credentials check
+      if (email === 'admin@vishal.com' && password === 'admin123') {
+        showToast('Login successful! Redirecting to dashboard...', 'success');
+        console.log('✅ LOGIN SUCCESS:', { email, role: 'Admin' });
+        // In real app: window.location.href = '/modules/fms/dashboard.html';
+      } else if (email && password) {
+        // Accept any credentials for demo
+        showToast(`Login successful! Welcome ${email}`, 'success');
+        console.log('✅ LOGIN (demo mode):', { email });
+      } else {
+        showToast('Please enter valid credentials', 'danger');
+      }
+
+      btn.disabled = false;
+      btnText.style.display = 'inline-flex';
+      btnSpinner.style.display = 'none';
+    });
+
+    // =========================================================
+    // PASSWORD STRENGTH METER
+    // =========================================================
+    document.getElementById('signupPassword').addEventListener('input', (e) => {
+      const pwd = e.target.value;
+      const bars = document.querySelectorAll('#strengthBars .strength-bar');
+      const text = document.getElementById('strengthText');
+
+      let strength = 0;
+      if (pwd.length >= 6) strength++;
+      if (pwd.length >= 10) strength++;
+      if (/[A-Z]/.test(pwd) && /[a-z]/.test(pwd)) strength++;
+      if (/\d/.test(pwd) && /[!@#$%^&*]/.test(pwd)) strength++;
+
+      bars.forEach((bar, i) => {
+        bar.className = 'strength-bar';
+        if (i < strength) {
+          if (strength <= 1) bar.classList.add('weak');
+          else if (strength <= 2) bar.classList.add('medium');
+          else bar.classList.add('strong');
+        }
+      });
+
+      const labels = ['Very weak', 'Weak', 'Medium', 'Strong', 'Very strong'];
+      text.textContent = pwd ? labels[strength] : 'Password strength';
+    });
+
+    // =========================================================
+    // SIGNUP (SIMULATED)
+    // =========================================================
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fullName = document.getElementById('signupName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const role = document.getElementById('signupRole').value;
+      const password = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('signupConfirm').value;
+
+      if (password !== confirmPassword) {
+        showToast('Passwords do not match!', 'danger');
+        return;
+      }
+      if (password.length < 6) {
+        showToast('Password must be at least 6 characters', 'danger');
+        return;
+      }
+
+      const btn = document.getElementById('signupBtn');
+      const btnText = document.getElementById('signupBtnText');
+      const btnSpinner = document.getElementById('signupBtnSpinner');
+
+      btn.disabled = true;
+      btnText.style.display = 'none';
+      btnSpinner.style.display = 'inline-flex';
+
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      showToast('Request submitted! Admin will approve your account.', 'success', 5000);
+      console.log('✅ SIGNUP REQUEST:', { fullName, email, role });
+
+      setTimeout(() => {
+        showPanel('login');
+        document.getElementById('loginEmail').value = email;
+      }, 1500);
+
+      btn.disabled = false;
+      btnText.style.display = 'inline-flex';
+      btnSpinner.style.display = 'none';
+    });
+
+    // =========================================================
+    // PWA INSTALL
+    // =========================================================
+    const pwaSection = document.getElementById('pwaSection');
+    const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+    const pwaBtnText = document.getElementById('pwaBtnText');
+    const pwaHint = document.getElementById('pwaHint');
+
+    let deferredPrompt = null;
+
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true;
+
+    if (isStandalone) {
+      pwaSection.classList.add('show');
+      pwaBtnText.textContent = '✅ App Already Installed';
+      pwaInstallBtn.disabled = true;
+      pwaHint.innerHTML = 'You are using the <strong>installed app</strong>. Enjoy!';
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      pwaSection.classList.add('show');
+      pwaBtnText.textContent = 'Install App on Device';
+      pwaInstallBtn.disabled = false;
+    });
+
+    pwaInstallBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) {
+        showToast('Install option not available. Try browser menu (⋮) → "Install app"', 'info', 5000);
+        return;
+      }
+      deferredPrompt.prompt();
+      try {
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          showToast('App installed successfully! 🎉', 'success');
+          pwaBtnText.textContent = '✅ App Installed';
+          pwaInstallBtn.disabled = true;
+        }
+      } catch (err) {
+        console.warn('[PWA] prompt error:', err);
+      }
+      deferredPrompt = null;
+    });
+
+    window.addEventListener('appinstalled', () => {
+      showToast('VISHAL FMS installed! Check your home screen / desktop.', 'success');
+      pwaBtnText.textContent = '✅ App Installed';
+      pwaInstallBtn.disabled = true;
+    });
+
+    // =========================================================
+    // WELCOME TOAST ON LOAD
+    // =========================================================
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        showToast('🔧 Demo Mode — Use any email/password to test login', 'info', 5000);
+      }, 1000);
+    });
+
+    console.log(`
+    ╔══════════════════════════════════════════╗
+    ║   VISHAL TECHNOPOWER - LOGIN PAGE        ║
+    ║   GitHub Pages Test Version              ║
+    ║                                          ║
+    ║   Demo Login:                            ║
+    ║   Email: admin@vishal.com                ║
+    ║   Pass:  admin123                        ║
+    ║                                          ║
+    ║   Or use any email/password to test      ║
+    ╚══════════════════════════════════════════╝
+    `);
+  </script>
+</body>
+                </html>
