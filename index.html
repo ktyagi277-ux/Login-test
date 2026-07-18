@@ -15,33 +15,134 @@
       min-height: 100vh;
       background: #0a1628;
       color: #fff;
+      overflow-x: hidden;
     }
 
-    /* ===== BACKGROUND ===== */
+    /* ===== BACKGROUND - Industrial night scene ===== */
     .bg {
       position: fixed; inset: 0; z-index: 0;
-      background: linear-gradient(135deg, #071426 0%, #0d2a4d 45%, #14406e 100%);
-    }
-    .bg::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(90deg, rgba(5,15,30,.55) 0%, rgba(5,15,30,.25) 55%, rgba(5,15,30,.45) 100%);
+      background: linear-gradient(180deg, #0a1a2f 0%, #12294a 30%, #1a3a5f 55%, #0f1e35 100%);
+      overflow: hidden;
     }
 
-    /* Animated background particles */
-    .bg-particles {
-      position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+    /* Sky gradient with sunset glow */
+    .bg-sky {
+      position: absolute; top: 0; left: 0; right: 0; height: 55%;
+      background:
+        radial-gradient(ellipse at 45% 90%, rgba(255, 140, 60, 0.35) 0%, transparent 40%),
+        radial-gradient(ellipse at 60% 100%, rgba(255, 180, 100, 0.25) 0%, transparent 50%),
+        linear-gradient(180deg, #0a1a2f 0%, #1a3a5f 60%, #2d4a70 100%);
     }
-    .bg-particles .particle {
+
+    /* Ground/industrial area */
+    .bg-ground {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 50%;
+      background: linear-gradient(180deg, transparent 0%, rgba(10, 25, 45, 0.6) 30%, #0a1a2f 100%);
+    }
+
+    /* Solar panels effect - left side */
+    .bg-solar {
+      position: absolute; bottom: 0; left: 0; width: 45%; height: 35%;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(30, 60, 110, 0.7) 0px,
+          rgba(30, 60, 110, 0.7) 40px,
+          rgba(20, 40, 80, 0.9) 40px,
+          rgba(20, 40, 80, 0.9) 42px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          transparent 0px,
+          transparent 30px,
+          rgba(15, 30, 60, 0.6) 30px,
+          rgba(15, 30, 60, 0.6) 32px
+        );
+      transform: perspective(400px) rotateX(65deg);
+      transform-origin: bottom;
+      opacity: 0.8;
+    }
+
+    /* High mast lights */
+    .light-pole {
       position: absolute;
-      border-radius: 50%;
-      background: rgba(59, 130, 246, 0.15);
-      animation: floatParticle linear infinite;
+      width: 3px;
+      background: linear-gradient(180deg, #1a2a3f 0%, #0a1525 100%);
+      transform-origin: bottom;
     }
-    @keyframes floatParticle {
-      0% { transform: translateY(100vh) scale(0); opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% { transform: translateY(-100px) scale(1); opacity: 0; }
+    .light-pole::before {
+      content: '';
+      position: absolute; top: -8px; left: -12px;
+      width: 28px; height: 16px;
+      background: radial-gradient(ellipse, #ffffcc 0%, #ffdd77 30%, transparent 70%);
+      border-radius: 50%;
+      box-shadow:
+        0 0 40px rgba(255, 240, 180, 0.9),
+        0 0 80px rgba(255, 220, 140, 0.6),
+        0 0 120px rgba(255, 200, 100, 0.3);
+    }
+
+    .pole1 { left: 42%; bottom: 30%; height: 280px; }
+    .pole2 { left: 35%; bottom: 32%; height: 220px; }
+    .pole3 { left: 30%; bottom: 34%; height: 180px; }
+    .pole4 { left: 27%; bottom: 36%; height: 140px; opacity: 0.7; }
+    .pole5 { left: 25%; bottom: 37%; height: 110px; opacity: 0.5; }
+
+    /* Industrial silhouettes right side */
+    .bg-industry {
+      position: absolute; bottom: 20%; right: 0; width: 40%; height: 40%;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(15, 30, 55, 0.4) 100%);
+    }
+    .bg-industry::before {
+      content: '';
+      position: absolute; bottom: 0; right: 5%;
+      width: 8px; height: 200px;
+      background: #0f1e35;
+      box-shadow:
+        20px 20px 0 #0f1e35, 40px -20px 0 #0f1e35,
+        70px 30px 0 #0f1e35, 100px 0px 0 #0f1e35,
+        130px 40px 0 #0f1e35, 160px 10px 0 #0f1e35,
+        200px 50px 0 #0f1e35, 240px 20px 0 #0f1e35;
+    }
+
+    /* Building lights on right */
+    .bg-industry::after {
+      content: '';
+      position: absolute; bottom: 30px; right: 10%;
+      width: 200px; height: 150px;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255, 220, 150, 0.4) 2px, transparent 3px),
+        radial-gradient(circle at 40% 60%, rgba(255, 220, 150, 0.4) 2px, transparent 3px),
+        radial-gradient(circle at 60% 40%, rgba(255, 220, 150, 0.4) 2px, transparent 3px),
+        radial-gradient(circle at 80% 70%, rgba(255, 220, 150, 0.4) 2px, transparent 3px);
+    }
+
+    /* Building on left */
+    .bg-building {
+      position: absolute; bottom: 22%; left: 3%; width: 25%; height: 20%;
+      background: linear-gradient(180deg, #1a2a45 0%, #0f1e35 100%);
+      clip-path: polygon(0 40%, 100% 20%, 100% 100%, 0 100%);
+      opacity: 0.85;
+    }
+    .bg-building::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(90deg,
+          transparent 0px, transparent 15px,
+          rgba(255, 230, 160, 0.35) 15px, rgba(255, 230, 160, 0.35) 20px),
+        repeating-linear-gradient(0deg,
+          transparent 0px, transparent 12px,
+          rgba(0,0,0,0.3) 12px, rgba(0,0,0,0.3) 14px);
+      clip-path: polygon(0 40%, 100% 20%, 100% 100%, 0 100%);
+    }
+
+    /* Dark overlay for text readability */
+    .bg-overlay {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(90deg, rgba(5, 15, 35, 0.75) 0%, rgba(5, 15, 35, 0.4) 40%, rgba(5, 15, 35, 0.5) 100%);
     }
 
     .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
@@ -54,66 +155,67 @@
     /* ===== LEFT BRANDING ===== */
     .brand { max-width: 580px; }
 
-    .brand-logo-row { display: flex; align-items: center; gap: 14px; margin-bottom: 60px; }
-    .brand-logo-row svg { width: 54px; height: 54px; flex-shrink: 0; }
-    .brand-name { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+    .brand-logo-row { display: flex; align-items: center; gap: 16px; margin-bottom: 100px; }
+    .brand-logo-row svg { width: 68px; height: 68px; flex-shrink: 0; }
+    .brand-name { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; line-height: 1; }
     .brand-name .b1 { color: #fff; }
     .brand-name .b2 { color: #3b82f6; }
     .brand-name .b3 { color: #fff; }
-    .brand-tagline { font-size: 14px; color: rgba(255,255,255,.78); margin-top: 4px; }
+    .brand-tagline { font-size: 15px; color: rgba(255,255,255,.85); margin-top: 8px; font-weight: 400; }
 
     .brand h1 {
-      font-size: 52px; font-weight: 800; line-height: 1.15; letter-spacing: -1px;
-      margin-bottom: 22px;
+      font-size: 56px; font-weight: 800; line-height: 1.1; letter-spacing: -1.5px;
+      margin-bottom: 24px;
     }
     .brand h1 .blue { color: #3b82f6; display: block; }
     .brand .sub {
-      font-size: 19px; color: rgba(255,255,255,.85); line-height: 1.5; max-width: 420px;
+      font-size: 20px; color: rgba(255,255,255,.9); line-height: 1.5; max-width: 420px;
+      font-weight: 400;
     }
 
     /* ===== GLASS CARD ===== */
     .glass-card {
-      width: 100%; max-width: 452px; flex-shrink: 0;
+      width: 100%; max-width: 460px; flex-shrink: 0;
       background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 24px;
-      padding: 34px 32px;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 40px 40px;
       box-shadow: 0 25px 70px rgba(0,0,0,0.5);
     }
 
-    .card-logo { display: flex; align-items: center; justify-content: center; gap: 11px; }
-    .card-logo svg { width: 40px; height: 40px; }
-    .card-logo .cname { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; }
-    .card-sub { text-align: center; font-size: 13px; color: rgba(255,255,255,.72); margin-top: 5px; margin-bottom: 26px; }
+    .card-logo { display: flex; align-items: center; justify-content: flex-start; gap: 14px; margin-bottom: 8px; }
+    .card-logo svg { width: 48px; height: 48px; }
+    .card-logo .cname { font-size: 24px; font-weight: 800; letter-spacing: -0.4px; }
+    .card-sub { text-align: left; font-size: 14px; color: rgba(255,255,255,.8); margin-top: 4px; margin-bottom: 30px; margin-left: 62px; }
 
-    .welcome { font-size: 25px; font-weight: 800; margin-bottom: 5px; }
-    .welcome-sub { font-size: 13.5px; color: rgba(255,255,255,.68); margin-bottom: 22px; }
+    .welcome { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+    .welcome-sub { font-size: 14px; color: rgba(255,255,255,.7); margin-bottom: 28px; }
 
     .form-panel { display: none; }
     .form-panel.active { display: block; }
 
-    .fg { margin-bottom: 16px; }
-    .fg-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
-    .fg label { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.92); }
-    .forgot { font-size: 12.5px; color: #60a5fa; text-decoration: none; font-weight: 500; }
+    .fg { margin-bottom: 20px; }
+    .fg-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .fg label { font-size: 14px; font-weight: 500; color: rgba(255,255,255,.95); }
+    .forgot { font-size: 13px; color: #60a5fa; text-decoration: none; font-weight: 500; }
     .forgot:hover { text-decoration: underline; }
 
     .iwrap { position: relative; }
     .iwrap > i {
-      position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
-      color: rgba(255,255,255,.5); font-size: 14px;
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      color: rgba(255,255,255,.55); font-size: 15px;
     }
     .fc {
-      width: 100%; padding: 13px 15px 13px 42px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.22);
-      border-radius: 11px; font-size: 14px; color: #fff;
+      width: 100%; padding: 14px 16px 14px 44px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 10px; font-size: 14px; color: #fff;
       outline: none; font-family: inherit; transition: all .2s;
     }
-    .fc::placeholder { color: rgba(255,255,255,.42); }
-    .fc:focus { border-color: #3b82f6; background: rgba(255,255,255,0.12); box-shadow: 0 0 0 3px rgba(59,130,246,.25); }
+    .fc::placeholder { color: rgba(255,255,255,.4); }
+    .fc:focus { border-color: #3b82f6; background: rgba(255,255,255,0.1); box-shadow: 0 0 0 3px rgba(59,130,246,.2); }
 
     input:-webkit-autofill {
       -webkit-box-shadow: 0 0 0 1000px #14304f inset;
@@ -121,27 +223,27 @@
       transition: background-color 99999s;
     }
 
-    select.fc { padding-left: 15px; cursor: pointer; }
+    select.fc { padding-left: 16px; cursor: pointer; }
     select.fc option { color: #0f172a; }
 
     .pwd-toggle {
-      position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
       background: none; border: none; color: rgba(255,255,255,.55);
       cursor: pointer; padding: 6px; font-size: 14px;
     }
     .pwd-toggle:hover { color: #60a5fa; }
 
     .btn-login {
-      position: relative; width: 100%; padding: 14px;
+      position: relative; width: 100%; padding: 15px;
       background: linear-gradient(135deg, #3b82f6, #2563eb);
-      color: #fff; border: none; border-radius: 11px;
-      font-size: 15px; font-weight: 700; cursor: pointer;
+      color: #fff; border: none; border-radius: 10px;
+      font-size: 16px; font-weight: 600; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: all .2s; margin-top: 6px; font-family: inherit;
+      transition: all .2s; margin-top: 8px; font-family: inherit;
     }
     .btn-login:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(37,99,235,.45); }
     .btn-login:disabled { opacity: .7; cursor: not-allowed; }
-    .btn-arrow { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 14px; }
+    .btn-arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 15px; }
 
     .spinner {
       display: inline-block; width: 14px; height: 14px;
@@ -152,39 +254,24 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .divider {
-      display: flex; align-items: center; margin: 20px 0;
-      color: rgba(255,255,255,.55); font-size: 12px;
+      display: flex; align-items: center; margin: 22px 0;
+      color: rgba(255,255,255,.6); font-size: 13px;
     }
     .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,.2); }
     .divider span { padding: 0 14px; }
 
     .btn-google {
-      width: 100%; padding: 12.5px; background: #fff; color: #1f2937;
-      border: none; border-radius: 11px; font-size: 14px; font-weight: 600;
-      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 13px; background: #fff; color: #1f2937;
+      border: none; border-radius: 10px; font-size: 14px; font-weight: 500;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px;
       transition: all .2s; font-family: inherit;
     }
     .btn-google:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(0,0,0,.3); }
-    .btn-google svg { width: 18px; height: 18px; }
+    .btn-google svg { width: 20px; height: 20px; }
 
-    .req-line { text-align: center; font-size: 13px; color: rgba(255,255,255,.72); margin-top: 20px; }
-    .req-line a { color: #60a5fa; text-decoration: none; font-weight: 600; cursor: pointer; }
+    .req-line { text-align: center; font-size: 14px; color: rgba(255,255,255,.75); margin-top: 22px; }
+    .req-line a { color: #3b82f6; text-decoration: none; font-weight: 500; cursor: pointer; }
     .req-line a:hover { text-decoration: underline; }
-
-    /* PWA section */
-    #pwaSection { display: none; margin-top: 16px; }
-    #pwaSection.show { display: block; }
-    .btn-pwa {
-      width: 100%; padding: 12px; background: rgba(255,255,255,.1); color: #93c5fd;
-      border: 1px solid rgba(255,255,255,.25); border-radius: 11px;
-      font-size: 13.5px; font-weight: 600; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 9px;
-      transition: all .2s; font-family: inherit;
-    }
-    .btn-pwa:hover:not(:disabled) { background: rgba(255,255,255,.16); }
-    .btn-pwa:disabled { opacity: .7; cursor: not-allowed; }
-    .pwa-hint { font-size: 11.5px; color: rgba(255,255,255,.5); text-align: center; margin-top: 8px; line-height: 1.5; }
-    .pwa-hint strong { color: #93c5fd; }
 
     /* Password strength */
     .password-strength { margin-top: 8px; display: flex; gap: 4px; }
@@ -197,7 +284,7 @@
     .back-link { display: inline-block; font-size: 13px; color: #60a5fa; text-decoration: none; margin-bottom: 16px; cursor: pointer; font-weight: 500; }
     .back-link:hover { text-decoration: underline; }
 
-    /* ===== TOAST NOTIFICATION ===== */
+    /* ===== TOAST ===== */
     .toast-container {
       position: fixed; top: 20px; right: 20px; z-index: 10000;
       display: flex; flex-direction: column; gap: 10px;
@@ -210,49 +297,72 @@
       animation: toastIn .3s ease-out;
       backdrop-filter: blur(10px);
     }
-    .toast.success { background: rgba(16, 185, 129, 0.9); }
-    .toast.danger { background: rgba(239, 68, 68, 0.9); }
-    .toast.info { background: rgba(59, 130, 246, 0.9); }
-    .toast.warning { background: rgba(245, 158, 11, 0.9); }
+    .toast.success { background: rgba(16, 185, 129, 0.95); }
+    .toast.danger { background: rgba(239, 68, 68, 0.95); }
+    .toast.info { background: rgba(59, 130, 246, 0.95); }
     .toast.removing { animation: toastOut .3s ease-in forwards; }
     @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     @keyframes toastOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
 
     /* ===== FOOTER ===== */
     .footer {
-      background: rgba(4,12,24,.78);
+      background: rgba(4,12,24,.85);
       backdrop-filter: blur(8px);
-      padding: 15px 64px;
+      padding: 18px 64px;
       display: flex; align-items: center; justify-content: space-between;
-      font-size: 13px; color: rgba(255,255,255,.65); flex-wrap: wrap; gap: 10px;
+      font-size: 14px; color: rgba(255,255,255,.7); flex-wrap: wrap; gap: 10px;
     }
     .footer-links { display: flex; gap: 0; align-items: center; }
-    .footer-links span { padding: 0 16px; border-right: 1px solid rgba(255,255,255,.2); cursor: default; }
-    .footer-links span:last-child { border-right: none; }
+    .footer-links span { padding: 0 20px; border-right: 1px solid rgba(255,255,255,.2); cursor: default; }
+    .footer-links span:last-child { border-right: none; padding-right: 0; }
     .footer-links span:hover { color: #fff; }
+
+    /* Small logo at building position - like image */
+    .bg-mini-logo {
+      position: absolute; bottom: 32%; left: 8%; width: 40px; height: 40px;
+      opacity: 0.7; z-index: 1;
+    }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 1050px) {
       .main { flex-direction: column; justify-content: center; padding: 32px 20px; gap: 28px; }
       .brand { max-width: 100%; text-align: center; }
-      .brand-logo-row { justify-content: center; margin-bottom: 22px; }
-      .brand h1 { font-size: 34px; margin-bottom: 12px; }
+      .brand-logo-row { justify-content: center; margin-bottom: 30px; }
+      .brand h1 { font-size: 36px; margin-bottom: 14px; }
       .brand h1 .blue { display: inline; }
-      .brand .sub { font-size: 15px; margin: 0 auto; }
-      .glass-card { max-width: 460px; }
-      .footer { padding: 13px 20px; justify-content: center; text-align: center; }
+      .brand .sub { font-size: 16px; margin: 0 auto; }
+      .glass-card { max-width: 460px; padding: 32px 28px; }
+      .footer { padding: 15px 20px; justify-content: center; text-align: center; }
+      .bg-solar, .bg-industry, .bg-building { opacity: 0.4; }
     }
     @media (max-width: 480px) {
-      .brand h1 { font-size: 27px; }
-      .glass-card { padding: 26px 20px; }
+      .brand h1 { font-size: 28px; }
+      .brand-logo-row svg { width: 54px; height: 54px; }
+      .brand-name { font-size: 24px; }
+      .glass-card { padding: 26px 22px; }
     }
   </style>
 </head>
 <body>
-  <div class="bg"></div>
-  <div class="bg-particles" id="bgParticles"></div>
+  <!-- BACKGROUND LAYERS -->
+  <div class="bg">
+    <div class="bg-sky"></div>
+    <div class="bg-building"></div>
+    <div class="bg-industry"></div>
+    <div class="bg-ground"></div>
+    <div class="bg-solar"></div>
+    <div class="light-pole pole5"></div>
+    <div class="light-pole pole4"></div>
+    <div class="light-pole pole3"></div>
+    <div class="light-pole pole2"></div>
+    <div class="light-pole pole1"></div>
+    <svg class="bg-mini-logo" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="80,80 432,80 256,440" fill="#3b82f6"/>
+      <path d="M 290 130 L 180 260 L 240 260 L 210 380 L 340 240 L 280 240 L 290 130 Z" fill="white"/>
+    </svg>
+    <div class="bg-overlay"></div>
+  </div>
 
-  <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
 
   <div class="page">
@@ -278,7 +388,7 @@
         </div>
 
         <h1>Powering Industries <span class="blue">Lighting Futures</span></h1>
-        <p class="sub">High Mast Solutions &amp; Solar Energy for a Sustainable Tomorrow</p>
+        <p class="sub">High Mast Solutions &amp; Solar Energy<br>for a Sustainable Tomorrow</p>
       </div>
 
       <!-- ===== GLASS LOGIN CARD ===== -->
@@ -298,7 +408,7 @@
         </div>
         <div class="card-sub">Tender Management System</div>
 
-        <!-- ===== LOGIN PANEL ===== -->
+        <!-- LOGIN PANEL -->
         <div id="loginPanel" class="form-panel active">
           <div class="welcome">Welcome Back</div>
           <div class="welcome-sub">Please login to your account</div>
@@ -339,24 +449,13 @@
             </button>
 
             <div class="req-line">New to the system? <a onclick="showPanel('signup')">Request Access</a></div>
-
-            <!-- PWA install -->
-            <div id="pwaSection">
-              <button type="button" class="btn-pwa" id="pwaInstallBtn">
-                <i class="fa-solid fa-download"></i>
-                <span id="pwaBtnText">Install App on Device</span>
-              </button>
-              <p class="pwa-hint" id="pwaHint">
-                Install <strong>VISHAL FMS</strong> for faster access &amp; native app experience.
-              </p>
-            </div>
           </form>
         </div>
 
-        <!-- ===== SIGNUP / REQUEST ACCESS PANEL ===== -->
+        <!-- SIGNUP PANEL -->
         <div id="signupPanel" class="form-panel">
           <a class="back-link" onclick="showPanel('login')"><i class="fa-solid fa-arrow-left"></i> Back to Login</a>
-          <div class="welcome" style="font-size:21px;">Request Access</div>
+          <div class="welcome" style="font-size:22px;">Request Access</div>
           <div class="welcome-sub">Admin approval ke baad login milega</div>
 
           <form id="signupForm">
@@ -417,16 +516,12 @@
               <span id="signupBtnText">Create Account <i class="fa-solid fa-user-plus btn-arrow"></i></span>
               <span id="signupBtnSpinner" style="display:none;"><span class="spinner"></span> Creating...</span>
             </button>
-
-            <p class="pwa-hint" style="margin-top:14px;">
-              Admin will review and approve your account before you can login.
-            </p>
           </form>
         </div>
       </div>
     </div>
 
-    <!-- ===== FOOTER ===== -->
+    <!-- FOOTER -->
     <div class="footer">
       <div>&copy; 2025 vishaltechnopower.com. All rights reserved.</div>
       <div class="footer-links">
@@ -438,86 +533,37 @@
   </div>
 
   <script>
-    // =========================================================
-    // MOCK UTILITIES (replaces api.js, auth.js, utils.js)
-    // =========================================================
-
-    // --- Toast Notification System ---
+    // Toast
     function showToast(message, type = 'info', duration = 3500) {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
       toast.className = `toast ${type}`;
-
-      const icons = {
-        success: 'fa-circle-check',
-        danger: 'fa-circle-xmark',
-        info: 'fa-circle-info',
-        warning: 'fa-triangle-exclamation'
-      };
-
+      const icons = { success: 'fa-circle-check', danger: 'fa-circle-xmark', info: 'fa-circle-info' };
       toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i> ${message}`;
       container.appendChild(toast);
-
       setTimeout(() => {
         toast.classList.add('removing');
         setTimeout(() => toast.remove(), 300);
       }, duration);
     }
 
-    // Alias for compatibility
-    const Utils = {
-      toast: showToast
-    };
-
-    // --- Background Particles ---
-    (function createParticles() {
-      const container = document.getElementById('bgParticles');
-      for (let i = 0; i < 20; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        const size = Math.random() * 6 + 2;
-        p.style.width = size + 'px';
-        p.style.height = size + 'px';
-        p.style.left = Math.random() * 100 + '%';
-        p.style.animationDuration = (Math.random() * 15 + 10) + 's';
-        p.style.animationDelay = (Math.random() * 10) + 's';
-        container.appendChild(p);
-      }
-    })();
-
-    // =========================================================
-    // PANEL SWITCH (Login <-> Request Access)
-    // =========================================================
     function showPanel(name) {
       document.getElementById('loginPanel').classList.toggle('active', name === 'login');
       document.getElementById('signupPanel').classList.toggle('active', name === 'signup');
     }
 
-    // =========================================================
-    // GOOGLE BUTTON
-    // =========================================================
     function googleNotReady() {
       showToast('Google login abhi available nahi hai — email/password se login karo.', 'info', 4000);
     }
 
-    // =========================================================
-    // PASSWORD TOGGLE
-    // =========================================================
     function togglePwd(inputId, btn) {
       const input = document.getElementById(inputId);
       const icon = btn.querySelector('i');
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.className = 'fa-solid fa-eye';
-      } else {
-        input.type = 'password';
-        icon.className = 'fa-solid fa-eye-slash';
-      }
+      if (input.type === 'password') { input.type = 'text'; icon.className = 'fa-solid fa-eye'; }
+      else { input.type = 'password'; icon.className = 'fa-solid fa-eye-slash'; }
     }
 
-    // =========================================================
-    // LOGIN (SIMULATED)
-    // =========================================================
+    // Login
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
@@ -525,46 +571,27 @@
       const btn = document.getElementById('loginBtn');
       const btnText = document.getElementById('loginBtnText');
       const btnSpinner = document.getElementById('loginBtnSpinner');
-
-      btn.disabled = true;
-      btnText.style.display = 'none';
-      btnSpinner.style.display = 'inline-flex';
-
-      // Simulate API call with 1.5s delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Demo credentials check
-      if (email === 'admin@vishal.com' && password === 'admin123') {
-        showToast('Login successful! Redirecting to dashboard...', 'success');
-        console.log('✅ LOGIN SUCCESS:', { email, role: 'Admin' });
-        // In real app: window.location.href = '/modules/fms/dashboard.html';
-      } else if (email && password) {
-        // Accept any credentials for demo
+      btn.disabled = true; btnText.style.display = 'none'; btnSpinner.style.display = 'inline-flex';
+      await new Promise(r => setTimeout(r, 1500));
+      if (email && password) {
         showToast(`Login successful! Welcome ${email}`, 'success');
-        console.log('✅ LOGIN (demo mode):', { email });
+        console.log('✅ LOGIN:', { email });
       } else {
         showToast('Please enter valid credentials', 'danger');
       }
-
-      btn.disabled = false;
-      btnText.style.display = 'inline-flex';
-      btnSpinner.style.display = 'none';
+      btn.disabled = false; btnText.style.display = 'inline-flex'; btnSpinner.style.display = 'none';
     });
 
-    // =========================================================
-    // PASSWORD STRENGTH METER
-    // =========================================================
+    // Password strength
     document.getElementById('signupPassword').addEventListener('input', (e) => {
       const pwd = e.target.value;
       const bars = document.querySelectorAll('#strengthBars .strength-bar');
       const text = document.getElementById('strengthText');
-
       let strength = 0;
       if (pwd.length >= 6) strength++;
       if (pwd.length >= 10) strength++;
       if (/[A-Z]/.test(pwd) && /[a-z]/.test(pwd)) strength++;
       if (/\d/.test(pwd) && /[!@#$%^&*]/.test(pwd)) strength++;
-
       bars.forEach((bar, i) => {
         bar.className = 'strength-bar';
         if (i < strength) {
@@ -573,14 +600,11 @@
           else bar.classList.add('strong');
         }
       });
-
       const labels = ['Very weak', 'Weak', 'Medium', 'Strong', 'Very strong'];
       text.textContent = pwd ? labels[strength] : 'Password strength';
     });
 
-    // =========================================================
-    // SIGNUP (SIMULATED)
-    // =========================================================
+    // Signup
     document.getElementById('signupForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fullName = document.getElementById('signupName').value.trim();
@@ -588,115 +612,21 @@
       const role = document.getElementById('signupRole').value;
       const password = document.getElementById('signupPassword').value;
       const confirmPassword = document.getElementById('signupConfirm').value;
-
-      if (password !== confirmPassword) {
-        showToast('Passwords do not match!', 'danger');
-        return;
-      }
-      if (password.length < 6) {
-        showToast('Password must be at least 6 characters', 'danger');
-        return;
-      }
-
+      if (password !== confirmPassword) { showToast('Passwords do not match!', 'danger'); return; }
+      if (password.length < 6) { showToast('Password must be at least 6 characters', 'danger'); return; }
       const btn = document.getElementById('signupBtn');
       const btnText = document.getElementById('signupBtnText');
       const btnSpinner = document.getElementById('signupBtnSpinner');
-
-      btn.disabled = true;
-      btnText.style.display = 'none';
-      btnSpinner.style.display = 'inline-flex';
-
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      showToast('Request submitted! Admin will approve your account.', 'success', 5000);
-      console.log('✅ SIGNUP REQUEST:', { fullName, email, role });
-
+      btn.disabled = true; btnText.style.display = 'none'; btnSpinner.style.display = 'inline-flex';
+      await new Promise(r => setTimeout(r, 2000));
+      showToast('Request submitted! Admin will approve.', 'success', 5000);
+      console.log('✅ SIGNUP:', { fullName, email, role });
       setTimeout(() => {
         showPanel('login');
         document.getElementById('loginEmail').value = email;
       }, 1500);
-
-      btn.disabled = false;
-      btnText.style.display = 'inline-flex';
-      btnSpinner.style.display = 'none';
+      btn.disabled = false; btnText.style.display = 'inline-flex'; btnSpinner.style.display = 'none';
     });
-
-    // =========================================================
-    // PWA INSTALL
-    // =========================================================
-    const pwaSection = document.getElementById('pwaSection');
-    const pwaInstallBtn = document.getElementById('pwaInstallBtn');
-    const pwaBtnText = document.getElementById('pwaBtnText');
-    const pwaHint = document.getElementById('pwaHint');
-
-    let deferredPrompt = null;
-
-    const isStandalone =
-      window.matchMedia('(display-mode: standalone)').matches ||
-      window.navigator.standalone === true;
-
-    if (isStandalone) {
-      pwaSection.classList.add('show');
-      pwaBtnText.textContent = '✅ App Already Installed';
-      pwaInstallBtn.disabled = true;
-      pwaHint.innerHTML = 'You are using the <strong>installed app</strong>. Enjoy!';
-    }
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      pwaSection.classList.add('show');
-      pwaBtnText.textContent = 'Install App on Device';
-      pwaInstallBtn.disabled = false;
-    });
-
-    pwaInstallBtn.addEventListener('click', async () => {
-      if (!deferredPrompt) {
-        showToast('Install option not available. Try browser menu (⋮) → "Install app"', 'info', 5000);
-        return;
-      }
-      deferredPrompt.prompt();
-      try {
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          showToast('App installed successfully! 🎉', 'success');
-          pwaBtnText.textContent = '✅ App Installed';
-          pwaInstallBtn.disabled = true;
-        }
-      } catch (err) {
-        console.warn('[PWA] prompt error:', err);
-      }
-      deferredPrompt = null;
-    });
-
-    window.addEventListener('appinstalled', () => {
-      showToast('VISHAL FMS installed! Check your home screen / desktop.', 'success');
-      pwaBtnText.textContent = '✅ App Installed';
-      pwaInstallBtn.disabled = true;
-    });
-
-    // =========================================================
-    // WELCOME TOAST ON LOAD
-    // =========================================================
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        showToast('🔧 Demo Mode — Use any email/password to test login', 'info', 5000);
-      }, 1000);
-    });
-
-    console.log(`
-    ╔══════════════════════════════════════════╗
-    ║   VISHAL TECHNOPOWER - LOGIN PAGE        ║
-    ║   GitHub Pages Test Version              ║
-    ║                                          ║
-    ║   Demo Login:                            ║
-    ║   Email: admin@vishal.com                ║
-    ║   Pass:  admin123                        ║
-    ║                                          ║
-    ║   Or use any email/password to test      ║
-    ╚══════════════════════════════════════════╝
-    `);
   </script>
 </body>
-                </html>
+</html>
